@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="ta">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Heart Background + Image Cursor</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600&family=Poppins:wght@400&display=swap" rel="stylesheet">
+
+
+  <!-- Bootstrap -->
+  <link
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+    rel="stylesheet"
+  />
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- floating hearts container -->
+  <div id="bg-hearts-container"></div>
+
+  <!-- image that follows cursor -->
+  <img src="image1.JPG" alt="Me" id="cursorImg" class="cursor-image" />
+
+  <!-- center content -->
+  <div
+    class="container content-wrapper vh-100 d-flex flex-column justify-content-center align-items-center text-center"
+  >
+    <h1 class="display-4 fw-bold mb-3 gradient-title ">❤️ Love Theme UI</h1>
+  <p class="lead mb-2 gradient-title1 zigzag-text">
+  Un kai pidicha podhu, ellam safe nu thonudhu
+</p>
+
+<span class="love-subtext">
+  With you, my heart feels calm & happy 🤍
+</span>
+
+    <button
+      id="showQuotesBtn"
+      class="btn btn-light btn-lg px-5 py-2 m-5 bg-primary text-warning shadow-sm"
+    >
+      Click my Heart ❤️
+    </button>
+  </div>
+
+  <!-- Love quotes cards section -->
+    <!-- Love quotes cards section -->
+  <div id="quotesSection" class="container">
+    <div class="row g-3">
+      <div class="col-md-4">
+        <div class="card love-card">
+          <img
+            src="Image2.jpeg"
+            class="card-img-top love-card-img"
+            alt="Love 1"
+          />
+          <div class="card-body">
+            <p class="card-text mb-1 quote-text">
+              "நீ சிரிக்கற போது, என் mind‑ல இருந்த எல்லா stress‑ும் log out ஆகிடுச்சு."
+            </p>
+            <small>Soft corner ❤️</small>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-4">
+        <div class="card love-card">
+          <img
+            src="Image3.jpeg"
+            class="card-img-top love-card-img"
+            alt="Love 2"
+          />
+          <div class="card-body">
+            <p class="card-text mb-1 quote-text">
+              "You are not just my favourite person, you are my favourite feeling."
+            </p>
+            <small>Forever vibe ✨</small>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-4">
+        <div class="card love-card">
+          <img
+            src="Image4.jpeg"
+            class="card-img-top love-card-img"
+            alt="Love 3"
+          />
+          <div class="card-body">
+            <p class="card-text mb-1 quote-text">
+              "Seen tick வந்தாலும், reply வராம இருந்தாலும், love full‑ஆ இருக்கும்."
+            </p>
+            <small>Unseen love 💌</small>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <script>
+    /* === FLOATING HEARTS BACKGROUND === */
+    const bgContainer = document.getElementById("bg-hearts-container");
+
+    function createBackgroundHearts() {
+      const heart = document.createElement("div");
+      heart.classList.add("bg-heart");
+
+      // random position bottom side
+      const startX = Math.random() * 100; // vw
+      heart.style.left = startX + "vw";
+      heart.style.bottom = "-40px";
+
+      // random animation direction
+      const anims = ["float1", "float2", "float3"];
+      const anim = anims[Math.floor(Math.random() * anims.length)];
+      const duration = 6 + Math.random() * 6; // 6–12s
+      const delay = Math.random() * 4;
+
+      heart.style.animation = `${anim} ${duration}s linear ${delay}s infinite`;
+      heart.style.opacity = (0.4 + Math.random() * 0.4).toString();
+
+      bgContainer.appendChild(heart);
+    }
+
+    // create initial hearts
+    for (let i = 0; i < 40; i++) {
+      createBackgroundHearts();
+    }
+    // keep adding slowly
+    setInterval(() => {
+      createBackgroundHearts();
+      // optional: remove extra nodes to avoid DOM heavy
+      if (bgContainer.children.length > 80) {
+        bgContainer.removeChild(bgContainer.firstChild);
+      }
+    }, 1200);
+
+    /* === CURSOR / TOUCH FOLLOW IMAGE === */
+    const cursorImg = document.getElementById("cursorImg");
+    let deviceType = "mouse";
+
+    function isTouchDevice() {
+      try {
+        document.createEvent("TouchEvent");
+        deviceType = "touch";
+        return true;
+      } catch (e) {
+        deviceType = "mouse";
+        return false;
+      }
+    }
+    isTouchDevice();
+
+    function moveCursorImage(x, y) {
+      cursorImg.style.left = x + "px";
+      cursorImg.style.top = y + "px";
+      // small bounce effect
+      cursorImg.classList.remove("bounce");
+      void cursorImg.offsetWidth; // reflow
+      cursorImg.classList.add("bounce");
+    }
+
+    if (deviceType === "mouse") {
+      document.addEventListener("mousemove", (e) => {
+        moveCursorImage(e.clientX, e.clientY);
+      });
+    } else {
+      document.addEventListener("touchmove", (e) => {
+        const t = e.touches[0];
+        moveCursorImage(t.clientX, t.clientY);
+      });
+    }
+
+    /* === BUTTON → SHOW QUOTES CARDS === */
+        const showQuotesBtn = document.getElementById("showQuotesBtn");
+    const quotesSection = document.getElementById("quotesSection");
+
+    showQuotesBtn.addEventListener("click", () => {
+      if (
+        quotesSection.style.display === "none" ||
+        quotesSection.style.display === ""
+      ) {
+        quotesSection.style.display = "block";
+      } else {
+        quotesSection.style.display = "none";
+      }
+    });
+
+  </script>
+</body>
+</html>
